@@ -45,7 +45,7 @@
         </span>
       </div>
 
-      <!-- Password -->
+     
       <div class="relative">
         <input type="password" name="password" placeholder="Password" id="password"
                class="w-full py-3 pl-12 pr-10 bg-white/20 text-white placeholder-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-white" required />
@@ -55,7 +55,7 @@
         <span toggle="#password" class="fas fa-eye absolute right-4 top-3.5 cursor-pointer text-white toggle-password"></span>
       </div>
 
-      <!-- Role -->
+     
       <div>
         <select name="role" required
                 class="w-full py-3 px-4 bg-white/20 text-white border border-white/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-white">

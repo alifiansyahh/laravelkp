@@ -37,6 +37,18 @@
   <div class="bg-transparent text-transparent px-5 py-2 text-sm flex justify-between">
     <div class="social">
       <!-- Sosial Media -->
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <script src="{{ asset('js/slider.js') }}" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="social">
+    
+      
+    
     </div>
     
   </div>
@@ -68,6 +80,7 @@
   </header>
 
   <!-- Hero Slider -->
+<<<<<<< HEAD
   <div class="relative h-[100vh] overflow-hidden" id="slider-container">
     <div class="absolute w-full h-full slider fade">
       <img src="{{ asset('hero1.jpg') }}" alt="Hero Image 1" class="w-full h-full object-cover brightness-50">
@@ -91,18 +104,51 @@
         <h1 class="text-4xl md:text-5xl font-bold mb-4">Unduh Surat PDF</h1>
         <p class="text-lg md:text-xl mb-4">Cetak surat kapan pun, di mana pun</p>
         <a href="{{ route('login') }}" class="bg-white text-blue-900 px-6 py-3 rounded font-bold">Akses Sekarang</a>
+=======
+  <div class="slider-container">
+    <div class="slider fade">
+      <img src="{{ asset('hero1.jpg') }}" alt="Hero Image 1">
+      <div class="hero-text">
+        <h1>Sistem Pengajuan KP</h1>
+        <p>Proses mudah, cepat, dan terintegrasi</p>
+        <a href="{{ route('login') }}" class="cta-button">Mulai Sekarang</a>
+      </div>
+    </div>
+    <div class="slider fade">
+      <img src="{{ asset('hero2.jpg') }}" alt="Hero Image 2">
+      <div class="hero-text">
+        <h1>Lacak Surat Kerja praktekmu</h1>
+        <p>Langsung dari dashboard mahasiswa</p>
+        <a href="{{ route('login') }}" class="cta-button">Login</a>
+      </div>
+    </div>
+    <div class="slider fade">
+      <img src="{{ asset('hero3.jpg') }}" alt="Hero Image 3">
+      <div class="hero-text">
+        <h1>Unduh Surat PDF</h1>
+        <p>Cetak surat kapan pun, di mana pun</p>
+        <a href="{{ route('login') }}" class="cta-button">Akses Sekarang</a>
+>>>>>>> 3c6ec3943f35a8bf49a3bed63e84e73a6fda1bdc
       </div>
     </div>
   </div>
 
+<<<<<<< HEAD
   <!-- Parallax Section -->
   <section class="bg-fixed bg-cover bg-center text-white text-center py-32 px-6" style="background-image: url('{{ asset('hero3.jpg') }}');">
     <div class="bg-black bg-opacity-50 max-w-3xl mx-auto p-8 rounded-lg">
       <h2 class="text-2xl md:text-3xl font-bold mb-4">Profil Website</h2>
+=======
+  <!-- Konten Parallax -->
+  <section class="parallax-section">
+    <div class="content-box">
+      <h2>Profil Website</h2>
+>>>>>>> 3c6ec3943f35a8bf49a3bed63e84e73a6fda1bdc
       <p>Sistem ini dirancang untuk memudahkan mahasiswa dalam mengurus surat kerja praktik secara digital. Semua proses diawasi dan dikontrol oleh admin untuk memastikan validitas dan kecepatan layanan.</p>
     </div>
   </section>
 
+<<<<<<< HEAD
   <!-- Features Section -->
   <section class="bg-gray-600 py-16 px-5 flex flex-col md:flex-row flex-wrap justify-center gap-10 text-white">
     <div class="text-center max-w-xs">
@@ -118,16 +164,37 @@
     <div class="text-center max-w-xs">
       <img src="{{ asset('icon-pdf.png') }}" alt="" class="w-16 mx-auto mb-3">
       <h3 class="text-xl font-bold mb-1">Download PDF</h3>
+=======
+  <section class="features">
+    <div class="feature">
+      <img src="{{ asset('icon-form.png') }}" alt="">
+      <h3>Isi Form</h3>
+      <p>Pengajuan cukup dari HP atau laptop</p>
+    </div>
+    <div class="feature">
+      <img src="{{ asset('icon-tracking.png') }}" alt="">
+      <h3>Tracking</h3>
+      <p>Lihat status surat kapan saja</p>
+    </div>
+    <div class="feature">
+      <img src="{{ asset('icon-pdf.png') }}" alt="">
+      <h3>Download PDF</h3>
+>>>>>>> 3c6ec3943f35a8bf49a3bed63e84e73a6fda1bdc
       <p>Surat siap cetak langsung</p>
     </div>
   </section>
 
+<<<<<<< HEAD
   <!-- Footer -->
   <footer class="bg-gray-500 text-white text-center py-6 mt-10">
+=======
+  <footer>
+>>>>>>> 3c6ec3943f35a8bf49a3bed63e84e73a6fda1bdc
     <p>&copy; 2025 Sistem KP - USB YPKP</p>
     <p>Dikembangkan oleh Mahasiswa TI</p>
   </footer>
 
+<<<<<<< HEAD
   <script>
     // SLIDER
     let slideIndex = 0;
@@ -165,5 +232,7 @@
       }
     });
   </script>
+=======
+>>>>>>> 3c6ec3943f35a8bf49a3bed63e84e73a6fda1bdc
 </body>
 </html>
