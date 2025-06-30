@@ -1,0 +1,76 @@
+body {
+    background: linear-gradient(to right, #dbeafe, #eff6ff);
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    margin-top: 60px;
+}
+
+.dashboard-box {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    padding: 30px 40px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.6s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+    font-weight: 700;
+    color: #1e3a8a;
+}
+
+h5 {
+    font-weight: 600;
+    color: #1e40af;
+}
+
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.badge {
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-success {
+    background-color: #10b981;
+    border-color: #10b981;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+    border-color: #059669;
+}
+
+.btn-outline-danger {
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+.alert {
+    font-size: 14px;
+    border-radius: 6px;
+    margin-top: 15px;
+}
