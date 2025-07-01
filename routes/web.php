@@ -23,7 +23,7 @@ Route::get('/login', function () {
 })->name('login');
 
 Route::post('/login', function (Request $request) {
-    $credentials = $request->only('email', 'password');
+    $credentials = $request->only('email', 'password', 'role');
 
       if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
