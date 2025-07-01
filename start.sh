@@ -1,13 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 
-# Set permission
-chmod -R 775 storage bootstrap/cache
+# Jalankan migrate
+php artisan migrate --force
 
-# Buat storage link (jika kamu pakai upload/cetak PDF)
-php artisan storage:link || true
+# Jalankan queue (opsional)
+# php artisan queue:work &
 
-# Generate key (optional kalau belum di Variables)
-php artisan key:generate --force
-
-# Serve Laravel ke Railway
-php artisan serve --host=0.0.0.0 --port=8000
+# Jalankan Laravel dengan PHP built-in server
+php artisan serve --host=0.0.0.0 --port=8080
