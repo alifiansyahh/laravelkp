@@ -12,7 +12,7 @@ use App\Http\Controllers\AuthController;
 
 // ---------------------- MAIN PAGE ----------------------
 Route::get('/', function () {
-    return view('mahasiswa/index'); // Main landing page view
+    return view('index'); // Main landing page view
 });
 
 // ---------------------- LOGIN ----------------------
