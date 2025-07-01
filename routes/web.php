@@ -99,3 +99,11 @@ Route::get('/surat-saya', [PengajuanController::class, 'userPengajuan'])->name('
 Route::get('/pengajuan/{id}/cetak', [PengajuanController::class, 'cetak'])->name('pengajuan.cetak');
 
 
+Route::get('/db-check', function () {
+    try {
+        \DB::connection()->getPdo();
+        return "✅ Database connected!";
+    } catch (\Exception $e) {
+        return "❌ DB connection failed: " . $e->getMessage();
+    }
+});
