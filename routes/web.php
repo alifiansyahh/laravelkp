@@ -12,7 +12,7 @@ use App\Http\Controllers\AuthController;
 
 // ---------------------- MAIN PAGE ----------------------
 Route::get('/', function () {
-    return view('authentication/login'); // Main landing page view
+    return view('authentication/register'); // Main landing page view
 });
 
 // ---------------------- LOGIN ----------------------
