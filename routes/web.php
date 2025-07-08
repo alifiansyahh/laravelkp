@@ -40,7 +40,7 @@ Route::post('/login', function (Request $request) {
 
 // ✅ Route user biasa (mahasiswa)
 Route::get('/dashboard', function () {
-    return view('mahasiswa/index');
+    return view('index');
 })->name('dashboard.mahasiswa')->middleware('mahasiswa');
 
 
@@ -48,7 +48,7 @@ Route::get('/dashboard', function () {
 // ✅ Route admin
 Route::get('/admin/dashboard', function () {
     $pengajuans = \App\Models\Pengajuan::orderBy('created_at', 'desc')->get();
-    return view('admin/dashboardAdmin', compact('pengajuans'));
+    return view('dashboardAdmin', compact('pengajuans'));
 })->middleware('admin')->name('dashboardAdmin');
 
 
@@ -92,7 +92,7 @@ Route::get('/tracking-result', function (Request $request) {
         return redirect()->route('tracking')->with('status', 'Data pengajuan tidak ditemukan.');
     }
 
-    return view('mahasiswa/TrackingResult', compact('pengajuan'));
+    return view('TrackingResult', compact('pengajuan'));
 })->name('tracking.result');
 
 Route::get('/surat-saya', [PengajuanController::class, 'userPengajuan'])->name('pengajuan.user');
