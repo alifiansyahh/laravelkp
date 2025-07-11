@@ -10,7 +10,7 @@ class AuthController extends Controller
 {
     public function register()
     {
-        return view('authentication/register'); // arahkan ke view form kamu
+        return view('register'); // arahkan ke view form kamu
     }
 
     public function registerProses(Request $request)

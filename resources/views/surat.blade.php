@@ -71,7 +71,8 @@
     <table style="width: 100%; margin-bottom: 15px;">
         <tr>
             <td style="width: 20%;">Nomor</td>
-            <td>: 058/R/USH YPKP/IV/2025</td>
+            <td>: {{ str_pad($surat->nomor_surat, 3, '0', STR_PAD_LEFT) }}/R/USH YPKP/{{ date('m') }}/{{ date('Y') }}</td>
+
         </tr>
         <tr>
             <td>Lampiran</td>

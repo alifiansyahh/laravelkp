@@ -82,7 +82,7 @@ Route::get('/pengajuan/list', [PengajuanController::class, 'list']);
 
 //-------tracking-------
 Route::get('/tracking', function () {
-    return view('mahasiswa/tracking');
+    return view('tracking');
 })->name('tracking');
 
 Route::get('/tracking-result', function (Request $request) {
@@ -98,12 +98,9 @@ Route::get('/tracking-result', function (Request $request) {
 Route::get('/surat-saya', [PengajuanController::class, 'userPengajuan'])->name('pengajuan.user');
 Route::get('/pengajuan/{id}/cetak', [PengajuanController::class, 'cetak'])->name('pengajuan.cetak');
 
+/// Surat ///
+Route::post('/surat', [SuratController::class, 'store'])->name('surat.store');
+Route::get('/surat/{id}', [SuratController::class, 'show'])->name('surat');
 
-Route::get('/db-check', function () {
-    try {
-        \DB::connection()->getPdo();
-        return "✅ Database connected!";
-    } catch (\Exception $e) {
-        return "❌ DB connection failed: " . $e->getMessage();
-    }
-});
+
+

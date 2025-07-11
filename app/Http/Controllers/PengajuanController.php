@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\View;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
-
+use App\Models\Surat;
 
 
 
@@ -16,7 +16,7 @@ class PengajuanController extends Controller
     // Menampilkan form pengajuan
     public function index()
     {
-        return view('mahasiswa/Pengajuan');
+        return view('Pengajuan');
     }
 
     // Menyimpan data dan generate surat PDF
@@ -69,7 +69,7 @@ public function userPengajuan()
     $user = Auth::user();
     $pengajuan = Pengajuan::where('user_id', $user->id)->latest()->first();
 
-    return view('mahasiswa/surat', compact('pengajuan'));
+    return view('surat', compact('pengajuan'));
 }
 
 ///////cetak surat ----
@@ -82,9 +82,18 @@ public function cetak($id)
         return redirect()->back()->with('error', 'Surat belum disetujui oleh admin.');
     }
 
-    $pdf = Pdf::loadView('mahasiswa/surat', compact('pengajuan'));
+    // 🔽 Cek atau buat surat (agar nomor tidak dobel)
+    $surat = Surat::firstOrCreate(
+        ['pengajuan_id' => $pengajuan->id],
+        [
+            'user_id' => auth()->id(),
+            'judul' => 'Surat Pengajuan KP',
+            'nomor_surat' => (Surat::max('nomor_surat') ?? 0) + 1,
+        ]
+    );
+
+    $pdf = Pdf::loadView('surat', compact('pengajuan', 'surat'));
 
     return $pdf->download('surat_pengajuan_' . $pengajuan->npm . '.pdf');
 }
-
 }

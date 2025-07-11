@@ -40,15 +40,23 @@
     <div class="text-white text-2xl font-bold">USB<span class="text-red-700">YPKP</span></div>
     <div class="hidden md:flex items-center gap-4">
       <nav class="flex gap-4 text-white font-semibold">
-        @auth
-          <span>Halo, {{ Auth::user()->name }}</span>
-          <a href="{{ route('logout') }}" class="hover:text-red-500">Logout</a>
-        @else
-          <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
-        @endauth
-        <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
-        <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
-      </nav>
+    @auth
+        <span>Halo, {{ Auth::user()->name }}</span>
+
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit" class="hover:text-red-500 bg-transparent border-none p-0 m-0 cursor-pointer">
+                Logout
+            </button>
+        </form>
+    @else
+        <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
+    @endauth
+
+    <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
+    <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
+</nav>
+
     </div>
     <button id="menu-toggle" class="md:hidden text-white">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -57,17 +65,27 @@
     </button>
   </header>
 
-  <!-- Mobile Menu -->
-  <nav id="mobile-menu" class="hidden flex-col md:hidden gap-4 text-center text-white font-semibold bg-black px-5 py-4">
+ <!-- Mobile Menu -->
+<nav id="mobile-menu" class="hidden flex-col md:hidden gap-4 text-center text-white font-semibold bg-black px-5 py-4">
     @auth
       <span>Halo, {{ Auth::user()->name }}</span>
-      <a href="{{ route('logout') }}" class="hover:text-red-500">Logout</a>
+
+      <a href="#" class="hover:text-red-500"
+         onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
+         Logout
+      </a>
+
+      <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
+          @csrf
+      </form>
     @else
       <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
     @endauth
+
     <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
     <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
-  </nav>
+</nav>
+
 
   <!-- Hero Slider -->
   <div class="relative w-screen h-screen overflow-hidden" id="slider-container">
