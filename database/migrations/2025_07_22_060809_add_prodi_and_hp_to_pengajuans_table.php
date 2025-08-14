@@ -6,18 +6,25 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
+    /**
+     * Run the migrations.
+     */
+   public function up(): void
     {
         Schema::table('pengajuans', function (Blueprint $table) {
-            $table->string('status')->default('menunggu');
+            $table->string('prodi')->after('npm');
+            $table->string('hp')->after('prodi');
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::table('pengajuans', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->dropColumn('prodi');
+            $table->dropColumn('hp');
         });
     }
 };
-

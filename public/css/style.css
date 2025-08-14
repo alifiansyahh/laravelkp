@@ -17,6 +17,7 @@ body {
   background: rgba(0, 0, 0, 0);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 15px 30px;
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
@@ -153,4 +154,50 @@ footer {
   max-width: 1000px;
   margin: 40px auto;
   color: #1e293b;
+}
+
+/* --- Mobile Menu & Hamburger --- */
+.hamburger {
+  display: none; /* default sembunyikan di desktop */
+  cursor: pointer;
+}
+
+.hamburger svg {
+  width: 28px;
+  height: 28px;
+  fill: white;
+}
+
+/* Mobile menu hidden default */
+.mobile-nav {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.mobile-nav a {
+  display: block;
+  padding: 12px 20px;
+  color: white;
+  text-decoration: none;
+}
+
+.mobile-nav a:hover {
+  background: rgba(255,255,255,0.1);
+}
+
+.mobile-nav.show {
+  max-height: 500px; /* cukup besar untuk semua link */
+}
+
+/* Responsive breakpoints */
+@media (max-width: 768px) {
+  .navbar ul {
+    display: none; /* sembunyikan menu desktop */
+  }
+
+  .hamburger {
+    display: block; /* tampilkan hamburger */
+  }
 }

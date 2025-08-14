@@ -3,97 +3,141 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pengajuan;
-use Illuminate\Support\Facades\View;
-use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; 
 use App\Models\Surat;
-
-
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PengajuanController extends Controller
 {
-    // Menampilkan form pengajuan
+    /* ===============================
+    | USER: Form & Pengajuan Baru
+    ================================*/
     public function index()
     {
         return view('Pengajuan');
     }
 
-    // Menyimpan data dan generate surat PDF
     public function store(Request $request)
     {
-        // Validasi data input
+        // Validasi input
         $data = $request->validate([
             'nama' => 'required|string',
-            'npm'=> 'required|string',
+            'npm' => 'required|string',
+            'prodi' => 'required|string',
+            'hp' => 'required|string',
             'perusahaan' => 'required|string',
             'alamat' => 'required|string',
             'tanggal_pengajuan' => 'required|date',
         ]);
 
+        // Tambahkan status dan user ID
+        $data['status'] = 'menunggu';
+        $data['user_id'] = Auth::id();
+
         // Simpan ke database
         $pengajuan = Pengajuan::create($data);
-        return redirect('/pengajuan')->with('success', 'Pengajuan berhasil disimpan!!! Silahkan Tunggu disetujui.');
 
-
-
-        // Buat PDF dari view surat
-        $pdf = Pdf::loadView('pengajuan.surat', ['pengajuan' => $pengajuan]);
-
-        // Unduh file PDF
-        return $pdf->stream('surat_pengajuan.pdf');
-
-    }
-///// admin
-    public function list()
-{
-    $data = \App\Models\Pengajuan::orderBy('created_at', 'desc')->get();
-    return view('admin/list', compact('data'));
-}
-
-public function setujui($id)
-{
-    $pengajuan = Pengajuan::findOrFail($id);
-    $pengajuan->status = 'disetujui';
-    $pengajuan->save();
-
-    return redirect()->back()->with('success', 'Pengajuan telah disetujui.');
-}
-
-
-
-///////tampil data tracking----------
-
-public function userPengajuan()
-{
-    $user = Auth::user();
-    $pengajuan = Pengajuan::where('user_id', $user->id)->latest()->first();
-
-    return view('surat', compact('pengajuan'));
-}
-
-///////cetak surat ----
-
-public function cetak($id)
-{
-    $pengajuan = Pengajuan::findOrFail($id);
-
-    if ($pengajuan->status !== 'disetujui') {
-        return redirect()->back()->with('error', 'Surat belum disetujui oleh admin.');
+        return redirect('/pengajuan')->with('success', 'Pengajuan berhasil disimpan! Silakan tunggu disetujui.');
     }
 
-    // 🔽 Cek atau buat surat (agar nomor tidak dobel)
-    $surat = Surat::firstOrCreate(
-        ['pengajuan_id' => $pengajuan->id],
-        [
-            'user_id' => auth()->id(),
+    /* ===============================
+    | ADMIN: Tabel & Verifikasi
+    ================================*/
+
+    // Menampilkan daftar pengajuan dengan pencarian & pagination
+   public function list(Request $request)
+{
+    $query = Pengajuan::query();
+
+    if ($request->has('search') && $request->search !== '') {
+        $search = $request->search;
+        $query->where(function ($q) use ($search) {
+            $q->where('nama', 'like', "%$search%")
+              ->orWhere('npm', 'like', "%$search%");
+        });
+    }
+
+    // ✅ PASTIKAN gunakan paginate()
+    $pengajuans = Pengajuan::orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+
+
+    return view('dashboardAdmin', compact('pengajuans'));
+}
+
+
+    // Menyetujui pengajuan langsung
+    public function setujui($id)
+    {
+        $pengajuan = Pengajuan::findOrFail($id);
+        $pengajuan->status = 'disetujui';
+        $pengajuan->save();
+
+        return redirect()->back()->with('success', 'Pengajuan telah disetujui.');
+    }
+
+    // Form verifikasi manual
+    public function verifikasi($id)
+    {
+        $pengajuan = Pengajuan::findOrFail($id);
+        return view('verifikasi', compact('pengajuan'));
+    }
+
+    // Simpan hasil verifikasi & buat surat
+    public function verifikasiStore(Request $request, $id)
+    {
+        $request->validate([
+            'nomor_surat' => 'required|numeric',
+        ]);
+
+        $pengajuan = Pengajuan::findOrFail($id);
+        $pengajuan->status = 'disetujui';
+        $pengajuan->save();
+
+        Surat::create([
+            'user_id' => $pengajuan->user_id,
+            'pengajuan_id' => $pengajuan->id,
             'judul' => 'Surat Pengajuan KP',
-            'nomor_surat' => (Surat::max('nomor_surat') ?? 0) + 1,
-        ]
-    );
+            'nomor_surat' => $request->nomor_surat,
+        ]);
 
-    $pdf = Pdf::loadView('surat', compact('pengajuan', 'surat'));
+        return redirect()->route('dashboardAdmin')->with('success', 'Pengajuan berhasil disetujui dan surat dibuat.');
+    }
 
-    return $pdf->download('surat_pengajuan_' . $pengajuan->npm . '.pdf');
-}
+    /* ===============================
+    | USER: Lihat & Cetak Surat
+    ================================*/
+
+    // Halaman tracking pengajuan oleh user
+    public function userPengajuan()
+    {
+        $user = Auth::user();
+        $pengajuan = Pengajuan::where('user_id', $user->id)->latest()->first();
+
+        return view('surat', compact('pengajuan'));
+    }
+
+    // Cetak PDF surat yang sudah disetujui
+    public function cetak($id)
+    {
+        $pengajuan = Pengajuan::findOrFail($id);
+
+        if ($pengajuan->status !== 'disetujui') {
+            return redirect()->back()->with('error', 'Surat belum disetujui oleh admin.');
+        }
+
+        // Cek atau buat surat agar tidak dobel nomor
+        $surat = Surat::firstOrCreate(
+            ['pengajuan_id' => $pengajuan->id],
+            [
+                'user_id' => auth()->id(),
+                'judul' => 'Surat Pengajuan KP',
+                'nomor_surat' => (Surat::max('nomor_surat') ?? 0) + 1,
+            ]
+        );
+
+        $pdf = Pdf::loadView('surat', compact('pengajuan', 'surat'));
+
+        return $pdf->download('surat_pengajuan_' . $pengajuan->npm . '.pdf');
+    }
 }

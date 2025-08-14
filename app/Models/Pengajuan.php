@@ -11,7 +11,7 @@ class Pengajuan extends Model
 
    
 
-  protected $fillable = ['nama', 'npm','perusahaan', 'alamat','tanggal_pengajuan'];
+  protected $fillable = ['nama', 'npm','prodi','hp','perusahaan', 'alamat','tanggal_pengajuan'];
 
   // Relasi dengan user
 public function user()

@@ -6,183 +6,155 @@
   <title>Dashboard KP - USB YPKP</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  <script src="{{ asset('js/slider.js') }}" defer></script>
   <style>
     body {
       font-family: 'Poppins', sans-serif;
     }
-    .slide-down-enter {
-      opacity: 0;
-      transform: scaleY(0);
-      transform-origin: top;
-    }
-    .slide-down-enter-active {
-      opacity: 1;
-      transform: scaleY(1);
-      transition: all 0.3s ease-in-out;
-    }
-    .slide-down-leave {
-      opacity: 1;
-      transform: scaleY(1);
-    }
-    .slide-down-leave-active {
-      opacity: 0;
-      transform: scaleY(0);
-      transition: all 0.3s ease-in-out;
-    }
   </style>
 </head>
-<body class="bg-black text-white overflow-x-hidden">
+<body class="bg-white text-gray-800 overflow-x-hidden">
 
-  <!-- Navbar -->
-  <header class="bg-transparent px-5 py-4 shadow-md flex justify-between items-center">
-    <div class="text-white text-2xl font-bold">USB<span class="text-red-700">YPKP</span></div>
-    <div class="hidden md:flex items-center gap-4">
-      <nav class="flex gap-4 text-white font-semibold">
-    @auth
-        <span>Halo, {{ Auth::user()->name }}</span>
+<!-- Navbar -->
+<header class="bg-gray-900 px-5 py-4 shadow-md flex justify-between items-center text-white">
+  <div class="text-xl font-bold">USB<span class="text-red-600">YPKP</span></div>
 
-        <form id="logout-form" action="{{ route('logout') }}" method="POST">
-            @csrf
-            <button type="submit" class="hover:text-red-500 bg-transparent border-none p-0 m-0 cursor-pointer">
-                Logout
-            </button>
-        </form>
-    @else
-        <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
-    @endauth
-
-    <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
-    <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
-</nav>
-
-    </div>
-    <button id="menu-toggle" class="md:hidden text-white">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path d="M4 6h16M4 12h16M4 18h16"/>
-      </svg>
-    </button>
-  </header>
-
- <!-- Mobile Menu -->
-<nav id="mobile-menu" class="hidden flex-col md:hidden gap-4 text-center text-white font-semibold bg-black px-5 py-4">
+  <!-- Desktop Menu -->
+  <nav class="hidden md:flex gap-4 text-sm font-semibold">
     @auth
       <span>Halo, {{ Auth::user()->name }}</span>
-
-      <a href="#" class="hover:text-red-500"
-         onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();">
-         Logout
-      </a>
-
-      <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">
-          @csrf
+      <form id="logout-form" action="{{ route('logout') }}" method="POST">
+        @csrf
+        <button type="submit" class="hover:text-red-500">Logout</button>
       </form>
     @else
       <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
     @endauth
-
     <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
     <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
+  </nav>
+
+   <!-- Tombol Selalu Muncul -->
+  <a href="/input" 
+     class="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm ml-4">
+    <!-- Ikon -->
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    <!-- Teks hanya muncul di desktop -->
+    <span class="hidden md:inline">Input Tempat KP</span>
+  </a>
+
+  <!-- Hamburger Button -->
+  <button id="menu-toggle" class="md:hidden">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path d="M4 6h16M4 12h16M4 18h16"/>
+    </svg>
+  </button>
+</header>
+
+<!-- Mobile Menu -->
+<nav id="mobile-menu"
+     class="hidden md:hidden flex flex-col gap-4 text-center bg-gray-900 text-white
+            transition-all duration-300 ease-out transform opacity-0 -translate-y-2 py-0">
+  @auth
+    <span>Halo, {{ Auth::user()->name }}</span>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-mobile').submit();" class="hover:text-red-500">Logout</a>
+    <form id="logout-form-mobile" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+  @else
+    <a href="{{ route('login') }}" class="hover:text-red-500">Login</a>
+  @endauth
+  <a href="/pengajuan" class="hover:text-red-500">Pengajuan</a>
+  <a href="/tracking" class="hover:text-red-500">Tracking Surat</a>
 </nav>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn  = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
 
-  <!-- Hero Slider -->
-  <div class="relative w-screen h-screen overflow-hidden" id="slider-container">
-    <div class="absolute w-full h-full slider fade">
-      <img src="{{ asset('hero1.jpg') }}" class="w-full h-full object-cover brightness-50" alt="Hero 1">
-      <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">Sistem Pengajuan KP</h1>
-        <p class="text-lg md:text-xl mb-4">Proses mudah, cepat, dan terintegrasi</p>
-        <a href="{{ route('login') }}" class="bg-white text-blue-900 px-6 py-3 rounded font-bold">Mulai Sekarang</a>
-      </div>
+  btn.addEventListener('click', () => {
+    const isHidden = menu.classList.contains('hidden');
+
+    if (isHidden) {
+      // BUKA MENU
+      menu.classList.remove('hidden');
+      void menu.offsetWidth; // Reflow biar animasi jalan
+      menu.classList.remove('opacity-0', '-translate-y-2', 'py-0');
+      menu.classList.add('opacity-100', 'translate-y-0', 'py-4');
+    } else {
+      // TUTUP MENU
+      menu.classList.add('opacity-0', '-translate-y-2', 'py-0');
+      menu.classList.remove('opacity-100', 'translate-y-0', 'py-4');
+      menu.addEventListener('transitionend', () => {
+        menu.classList.add('hidden');
+      }, { once: true });
+    }
+  });
+});
+</script>
+
+
+  <!-- Hero Section -->
+  <section class="relative w-full h-[60vh] flex items-center justify-center bg-gray-200 text-center">
+    <div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-2">Sistem Pengajuan KP</h1>
+      <p class="text-gray-600 mb-4">Proses mudah, cepat, dan terintegrasi</p>
+      <a href="{{ route('login') }}" class="bg-gray-900 text-white px-5 py-2 rounded">Mulai Sekarang</a>
     </div>
-    <div class="absolute w-full h-full slider fade hidden">
-      <img src="{{ asset('hero2.jpg') }}" class="w-full h-full object-cover brightness-50" alt="Hero 2">
-      <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">Lacak Surat Kerja Praktekmu</h1>
-        <p class="text-lg md:text-xl mb-4">Langsung dari dashboard mahasiswa</p>
-        <a href="{{ route('login') }}" class="bg-white text-blue-900 px-6 py-3 rounded font-bold">Login</a>
-      </div>
-    </div>
-    <div class="absolute w-full h-full slider fade hidden">
-      <img src="{{ asset('hero3.jpg') }}" class="w-full h-full object-cover brightness-50" alt="Hero 3">
-      <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">Unduh Surat PDF</h1>
-        <p class="text-lg md:text-xl mb-4">Cetak surat kapan pun, di mana pun</p>
-        <a href="{{ route('login') }}" class="bg-white text-blue-900 px-6 py-3 rounded font-bold">Akses Sekarang</a>
-      </div>
-    </div>
-  </div>
+  </section>
 
   <!-- Profil -->
-  <section class="bg-fixed bg-cover bg-center text-white text-center py-32 px-6" style="background-image: url('{{ asset('hero3.jpg') }}');">
-    <div class="bg-black bg-opacity-50 max-w-3xl mx-auto p-8 rounded-lg">
-      <h2 class="text-2xl md:text-3xl font-bold mb-4">Profil Website</h2>
-      <p>Sistem ini dirancang untuk memudahkan mahasiswa dalam mengurus surat kerja praktik secara digital. Semua proses diawasi dan dikontrol oleh admin untuk memastikan validitas dan kecepatan layanan.</p>
-    </div>
+  <section class="text-center py-16 px-6">
+    <h2 class="text-2xl font-bold mb-4">Profil Website</h2>
+    <p class="max-w-2xl mx-auto text-gray-700">
+      Sistem ini dirancang untuk memudahkan mahasiswa dalam mengurus surat kerja praktik secara digital.
+      Semua proses diawasi dan dikontrol oleh admin untuk memastikan validitas dan kecepatan layanan.
+    </p>
   </section>
 
-  <!-- Fitur -->
-  <section class="bg-gray-800 py-16 px-5 flex flex-col md:flex-row flex-wrap justify-center gap-10 text-white">
-    <div class="text-center max-w-xs">
-      <img src="{{ asset('icon-form.png') }}" alt="" class="w-16 mx-auto mb-3">
-      <h3 class="text-xl font-bold mb-1">Isi Form</h3>
-      <p>Pengajuan cukup dari HP atau laptop</p>
-    </div>
-    <div class="text-center max-w-xs">
-      <img src="{{ asset('icon-tracking.png') }}" alt="" class="w-16 mx-auto mb-3">
-      <h3 class="text-xl font-bold mb-1">Tracking</h3>
-      <p>Lihat status surat kapan saja</p>
-    </div>
-    <div class="text-center max-w-xs">
-      <img src="{{ asset('icon-pdf.png') }}" alt="" class="w-16 mx-auto mb-3">
-      <h3 class="text-xl font-bold mb-1">Download PDF</h3>
-      <p>Surat siap cetak langsung</p>
-    </div>
-  </section>
+ <!-- Fitur -->
+<section class="bg-gray-100 py-12 px-5 flex flex-col md:flex-row justify-center gap-10">
+  
+  <!-- Isi Form -->
+  <div class="text-center max-w-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-gray-800 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-10 4h6m-6 4h6M4 7h16v14H4V7z" />
+    </svg>
+    <h3 class="text-lg font-bold mb-1">Isi Form</h3>
+    <p class="text-gray-600">Pengajuan cukup dari HP atau laptop</p>
+  </div>
+
+  <!-- Tracking -->
+  <div class="text-center max-w-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-gray-800 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2a4 4 0 018 0v2m-4-4a4 4 0 100-8 4 4 0 000 8z" />
+    </svg>
+    <h3 class="text-lg font-bold mb-1">Tracking</h3>
+    <p class="text-gray-600">Lihat status surat kapan saja</p>
+  </div>
+
+  <!-- Download PDF -->
+  <div class="text-center max-w-xs">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12 mx-auto text-gray-800 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    <h3 class="text-lg font-bold mb-1">Download PDF</h3>
+    <p class="text-gray-600">Surat siap cetak langsung</p>
+  </div>
+
+</section>
+
 
   <!-- Footer -->
-  <footer class="bg-gray-900 text-white text-center py-6 mt-10">
+  <footer class="bg-gray-900 text-white text-center py-6 mt-10 text-sm">
     <p>&copy; 2025 Sistem KP - USB YPKP</p>
     <p>Dikembangkan oleh Mahasiswa TI</p>
   </footer>
 
-  <!-- Script Slider & Navbar -->
+  <!-- Script Menu Mobile -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let slideIndex = 0;
-      const slides = document.querySelectorAll('.slider');
-
-      function showSlides() {
-        slides.forEach(slide => slide.classList.add('hidden'));
-        slideIndex = (slideIndex + 1 > slides.length) ? 1 : slideIndex + 1;
-        slides[slideIndex - 1].classList.remove('hidden');
-      }
-
-      showSlides();
-      setInterval(showSlides, 5000);
-
-      const toggleBtn = document.getElementById('menu-toggle');
-      const mobileMenu = document.getElementById('mobile-menu');
-
-      toggleBtn.addEventListener('click', () => {
-        if (mobileMenu.classList.contains('hidden')) {
-          mobileMenu.classList.remove('hidden');
-          mobileMenu.classList.add('slide-down-enter');
-          setTimeout(() => {
-            mobileMenu.classList.add('slide-down-enter-active');
-            mobileMenu.classList.remove('slide-down-enter');
-          }, 10);
-        } else {
-          mobileMenu.classList.add('slide-down-leave');
-          mobileMenu.classList.add('slide-down-leave-active');
-          setTimeout(() => {
-            mobileMenu.classList.remove('slide-down-leave', 'slide-down-leave-active');
-            mobileMenu.classList.add('hidden');
-          }, 300);
-        }
-      });
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
     });
   </script>
 </body>
